@@ -61,17 +61,17 @@ const CourseIdPage = async ({
         course.title,
         course.description,
         course.imageUrl,
-        course.price,
+        course.price != null && course.price != undefined,
         course.categoryId,
         course.chapters.some(chapter => chapter.isPublished),
     ]
 
     const totalFields = requiredFields.length;
-    const completedFields = requiredFields.filter(field => field).length;
+    const completedFields = requiredFields.filter(Boolean).length;
 
     const completionText = `${completedFields} of ${totalFields} fields completed`;
 
-    const isComplete = requiredFields.every(field => field);
+    const isComplete = requiredFields.every(Boolean);
 
     return (
         <>

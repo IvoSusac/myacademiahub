@@ -4,17 +4,13 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
@@ -22,7 +18,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
 import { Course } from "@prisma/client";
 import { formatPrice } from "@/lib/format";
 
@@ -32,7 +27,7 @@ interface PriceFormProps {
 }
 
 const formSchema = z.object({
-    price: z.coerce.number(),
+    price: z.coerce.number().min(0, "Price cannot be negative"),
 });
 
 export const PriceForm = ({
@@ -40,7 +35,6 @@ export const PriceForm = ({
     courseId
 }: PriceFormProps) => {
     const router = useRouter();
-
     const [isEditing, setIsEditing] = useState(false);
 
     const toggleEditing = () => { setIsEditing(!isEditing) };
@@ -85,9 +79,11 @@ export const PriceForm = ({
                 <div className={cn(
                     "mt-2",
                     "text-sm",
-                    !initialData.price && "text-gray-400 italic"
+                    (initialData.price === undefined || initialData.price === null) && "text-gray-400 italic"
                 )}>
-                    {initialData.price ? formatPrice(initialData.price) : "No price set"}
+                    {initialData.price !== undefined && initialData.price !== null 
+                        ? formatPrice(initialData.price) 
+                        : "No price set"}
                 </div>
             )}
             {isEditing && (
