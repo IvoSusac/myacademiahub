@@ -7,6 +7,7 @@ import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
 import { CourseProgressButton } from "./_components/course-progress-button";
+import { FiDownload } from 'react-icons/fi';
 
 const ChapterIdPage = async ({
     params
@@ -91,14 +92,20 @@ const ChapterIdPage = async ({
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <p className="">Attachments:</p>
                                     {attachments.map((attachment) => (
-                                        <a
+                                        <div
                                             key={attachment.id}
-                                            href={attachment.url}
-                                            target="_blank"
+                                            //href={attachment.url}
+                                            //target="_blank"
                                             className="p-4 bg-slate-200 rounded-md flex items-center justify-between"
                                         >
                                             <span>{attachment.name}</span>
-                                        </a>
+                                            <a
+                                                href={`/api/download?url=${encodeURIComponent(attachment.url)}&name=${encodeURIComponent(attachment.name)}`}
+                                                className="text-blue-500 hover:text-blue-700"
+                                            >
+                                                <FiDownload className="h-4 w-4" />
+                                            </a>
+                                        </div>
                                     ))}
                                 </div>
                             </div>
